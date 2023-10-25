@@ -1,73 +1,57 @@
-const lienzo = document.querySelector('#lienzo');
+const apikey ='';
+const UrlBase ='https://api.openweathermap.org/data/2.5/weather';
 
-const ctx = lienzo.getContext('2d');
+const fetchapi = url => fetch(url).then(repose => repose.json());
 
-function cuadrito(ctx, x, y){
-    ctx.fillStyle = 'violet';
-    ctx.fillRect(x, y, 10, 10);
+async function getClima(lat, lon, apikey){
+    const url =`${UrlBase}$lat=${lat}&lon=${lon}&appid=${apikey}`;
+    const clima = await fetchapi(url);
+    console.log(clima);
+    const temperature = (clima.main.temp - 273.15).toFixed(2);
+    document.querySelector('h2').innerHTML = temperature + '°C-' + clima.name;
+    pintaFondo(temperature);
+    pintaFondo(temperature);
+
+
 }
-let ejeX = 0;
-let ejeY = 0;
-setInterval(()=>{
-    cuadrito(ctx, ejeX, ejeY,);
-    ejeX += 20;
-}, 500);
-/*
-ctx.beginPath();
-ctx.fillStyle = 'white';
-ctx.arc(200, 200, 200, 0, Math.PI * 2);
-ctx.fill();
+async function getClimaCity(city, apikey){
+    const url = `${UrlBase}?q=${ city}&appid=${apikey}`;
+    const  clima = await fetchapi(url);
+    console.log(clima);
+    const temperatuere = clima.main.tem;
+    document.querySelector('.wheater h2').innerHTML = Math.round(temp);
+    
 
-ctx.fillStyle = 'black';
-ctx.strokeRect(100, 100, 200, 200); // Cabeza
-ctx.strokeRect(150, 150, 20, 20); // Ojo Iz
-ctx.fillRect(160, 160, 10, 10); 
-ctx.strokeRect(230, 150, 20, 20); //Ojo Der
-ctx.fillRect(240, 160, 10, 10); 
-//Lentes
-ctx.beginPath();
-ctx.arc(160, 160, 25, 0, Math.PI * 2, true);
-ctx.stroke();
-ctx.beginPath();
-ctx.arc(240, 160, 25, 0, Math.PI * 2, true);
-ctx.stroke();
-ctx.beginPath();// Line Left
-ctx.moveTo(100, 160);
-ctx.lineTo(140, 160);
-ctx.stroke();
-ctx.beginPath();//Line Ringht
-ctx.moveTo(265, 160);
-ctx.lineTo(300, 160);
-ctx.stroke();
-ctx.beginPath();//Line Center
-ctx.moveTo(185, 160);
-ctx.lineTo(215, 160);
-ctx.stroke();
-ctx.strokeRect(190, 180, 20, 50); //Nariz
-ctx.strokeRect(150, 250, 100, 20); //Boca
-ctx.strokeRect(200, 250, 110, 10); 
-ctx.strokeRect(200, 250, 110, 10); 
+}
+{
+    function pintaFondo(temp){
+        const fondo = document.querySelector('body');
+        if(temp <13){
+            fondo.style.background = '#aaa55';
+        }else if (tem <22){
+            fondo.style.background = '#dd5555';
+        }else{
+            fondo.style.background = '#44ddcc';
+        }
+    }
+}
+function pintaEmoji(temp){
+    const emo = document.querySelector('#emoji');
+    if(temp < 13){
+        emo.innerHTML = '❄️🥶❄️🥶❄️🥶';
+    }else if (emo < 22){
+        emo.innerHTML = '☀️🍻☀️🍻';
+    }else{
+        emo.innerHTML = '🔥🔥🥵🔥🔥';
+    }
+}
 
-ctx.fillRect(90, 90, 220, 40);
-ctx.fillRect(110, 80, 180, 40);
+//Obtener geolocalizacion
+navigator.geolocation.getCurrentPosition((position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    getClima(lat, lon, apikey);
+  });
 
-//Corbata
-ctx.fillStyle = 'red';
-ctx.beginPath();
-ctx.moveTo(200, 300);
-ctx.lineTo(230, 320)
-ctx.lineTo(200, 340);
-ctx.lineTo(170, 320);
-ctx.lineTo(200, 300);
-ctx.fill();
-ctx.stroke()
-ctx.beginPath();
-ctx.moveTo(200, 330);
-ctx.lineTo(240, 350)
-ctx.lineTo(200, 400);
-ctx.lineTo(160, 350);
-ctx.lineTo(200, 330);
-ctx.fill();
-ctx.stroke()
-*/
 
+;
